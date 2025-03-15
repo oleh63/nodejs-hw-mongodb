@@ -2,6 +2,7 @@ import createHttpError from 'http-errors';
 
 import {
   createContact,
+  deleteContact,
   getAllContacts,
   getContactById,
   updateContact,
@@ -56,4 +57,17 @@ export const updateContactController = async (req, res, next) => {
     message: 'Successfully patched a contact!',
     data: result,
   });
+};
+
+export const deleteContactController = async (req, res, next) => {
+  const { id } = req.params;
+
+  const contact = await deleteContact(id);
+
+  if (!contact) {
+    next(createHttpError(404, 'Student not found'));
+    return;
+  }
+
+  res.status(204).send();
 };
