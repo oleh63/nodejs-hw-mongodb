@@ -31,7 +31,8 @@ export const getAllContacts = async ({
     status: 200,
     message: 'Successfully found contacts!',
     data: {
-      contacts,
+      data: [contacts],
+
       ...paginationData,
     },
   };
