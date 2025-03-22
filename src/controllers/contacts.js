@@ -25,9 +25,7 @@ export const getContactsController = async (req, res) => {
     filter,
   });
 
-  res.json({
-    data: contacts,
-  });
+  res.json(contacts);
 };
 
 export const getContactByIdController = async (req, res, next) => {
