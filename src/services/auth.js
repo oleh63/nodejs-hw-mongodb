@@ -35,9 +35,9 @@ export const loginUser = async (email, password) => {
 
   return Session.create({
     userId: user._id,
-    accesToken: crypto.randomBytes(30).toString('base64'),
+    accessToken: crypto.randomBytes(30).toString('base64'),
     refreshToken: crypto.randomBytes(30).toString('base64'),
-    accesTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES),
+    accessTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES),
     refreshTokenvalidUntil: new Date(Date.now() + THIRTY_DAYS),
   });
 };
@@ -69,9 +69,9 @@ export const refreshSession = async (sessionId, refreshToken) => {
 
   return Session.create({
     userId: currentSession.userId,
-    accesToken: crypto.randomBytes(30).toString('base64'),
+    accessToken: crypto.randomBytes(30).toString('base64'),
     refreshToken: crypto.randomBytes(30).toString('base64'),
-    accesTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES),
+    accessTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES),
     refreshTokenvalidUntil: new Date(Date.now() + THIRTY_DAYS),
   });
 };
