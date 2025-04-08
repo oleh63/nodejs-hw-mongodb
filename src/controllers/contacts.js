@@ -11,9 +11,12 @@ import {
   updateContact,
 } from '../services/contact.js';
 
+import { getEnvVar } from '../utils/getEnvVar.js';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
+
+import { uploadToCloudinary } from '../utils/uploadToCloudinary.js';
 
 export const getContactsController = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
@@ -53,15 +56,25 @@ export const getContactByIdController = async (req, res, next) => {
 };
 
 export const createContactController = async (req, res) => {
-  await fs.rename(
-    req.file.path,
-    path.resolve('src', 'uploads', req.file.filename),
-  );
+  let photo = null;
+
+  if (getEnvVar('UPLOAD_TO_CLOUDINARY') === 'true') {
+    const resultUpload = await uploadToCloudinary(req.file.path);
+
+    photo = resultUpload.secure_url;
+  } else {
+    await fs.rename(
+      req.file.path,
+      path.resolve('src', 'uploads', req.file.filename),
+    );
+
+    photo = `htpp://localhost:8383/uploads/${req.file.filename}`;
+  }
 
   const contact = {
     ...req.body,
     userId: req.user.id,
-    photo: req.file.filename,
+    photo,
   };
 
   console.log(req.file);
