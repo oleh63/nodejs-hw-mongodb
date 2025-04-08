@@ -7,13 +7,17 @@ import {
   updateContactController,
   deleteContactController,
 } from '../controllers/contacts.js';
+
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
+
+import { upload } from '../middlewares/upload.js';
 import { validateBody } from '../middlewares/validateBody.js';
+import { isValidId } from '../middlewares/isValidId.js';
+
 import {
   createContactsSchema,
   updateContactsSchema,
 } from '../validation/contacts.js';
-import { isValidId } from '../middlewares/isValidId.js';
 
 const router = Router();
 const jsonParser = express.json();
@@ -24,6 +28,7 @@ router.get('/:id', isValidId, ctrlWrapper(getContactByIdController));
 
 router.post(
   '/',
+  upload.single('photo'),
   jsonParser,
   validateBody(createContactsSchema),
   ctrlWrapper(createContactController),
