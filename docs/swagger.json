@@ -39,43 +39,84 @@
         ],
         "parameters": [
           {
-            "in": "query",
             "name": "page",
+            "in": "query",
+            "required": false,
             "schema": {
               "type": "integer",
+              "minimum": 1,
+              "default": 1,
               "example": 1
             },
             "description": "Page number for pagination"
           },
           {
+            "name": "perPage",
             "in": "query",
-            "name": "limit",
+            "required": false,
             "schema": {
               "type": "integer",
-              "example": 20
+              "minimum": 1,
+              "default": 10,
+              "example": 10
             },
             "description": "Number of contacts per page"
           },
           {
+            "name": "sortBy",
             "in": "query",
-            "name": "favorite",
+            "required": false,
             "schema": {
-              "type": "boolean",
-              "example": true
+              "type": "string",
+              "enum": [
+                "name",
+                "email",
+                "phoneNumber"
+              ]
             },
-            "description": "Filter contacts by favorite status"
+            "description": "Field to sort"
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            },
+            "description": "Sort order"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter contacts by name"
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter contacts by email"
           }
         ],
         "responses": {
           "200": {
-            "description": "List of contacts",
+            "description": "Successfully found contacts!",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "required": [
                     "status",
-                    "message",
                     "data"
                   ],
                   "properties": {
@@ -83,12 +124,39 @@
                       "type": "integer",
                       "example": 200
                     },
-                    "message": {
-                      "type": "string",
-                      "example": "Successfully found contacts!"
-                    },
                     "data": {
-                      "$ref": "#/components/schemas/contact"
+                      "type": "object",
+                      "required": [
+                        "totalPages",
+                        "currentPage",
+                        "perPage",
+                        "totalCount",
+                        "contacts"
+                      ],
+                      "properties": {
+                        "totalPages": {
+                          "type": "integer",
+                          "example": 5
+                        },
+                        "currentPage": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "perPage": {
+                          "type": "integer",
+                          "example": 10
+                        },
+                        "totalCount": {
+                          "type": "integer",
+                          "example": 50
+                        },
+                        "contacts": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/contact"
+                          }
+                        }
+                      }
                     }
                   }
                 }
@@ -116,6 +184,7 @@
           }
         ],
         "requestBody": {
+          "required": true,
           "content": {
             "multipart/form-data": {
               "schema": {
@@ -130,15 +199,30 @@
                     "type": "string",
                     "example": "Petro Vaskiv"
                   },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "petro@example.com"
+                  },
                   "phoneNumber": {
                     "type": "string",
                     "description": "Contact number",
                     "example": 380995686988
                   },
-                  "email": {
+                  "isFavourite": {
+                    "type": "boolean",
+                    "example": true
+                  },
+                  "contactType": {
                     "type": "string",
-                    "format": "email",
-                    "example": "petro@example.com"
+                    "description": "Contact contact type",
+                    "enum": [
+                      "work",
+                      "home",
+                      "personal"
+                    ],
+                    "example": "personal",
+                    "default": "personal"
                   },
                   "photo": {
                     "type": "string",
@@ -292,9 +376,9 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "ID of the contact to update",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "ID of the contact to update"
             }
           }
         ],
@@ -320,6 +404,21 @@
                     "format": "email",
                     "description": "Updated email",
                     "example": "ivan@example.com"
+                  },
+                  "isFavourite": {
+                    "type": "boolean",
+                    "example": false
+                  },
+                  "contactType": {
+                    "type": "string",
+                    "description": "Contact contact type",
+                    "enum": [
+                      "work",
+                      "home",
+                      "personal"
+                    ],
+                    "example": "personal",
+                    "default": "personal"
                   },
                   "photo": {
                     "type": "string",
