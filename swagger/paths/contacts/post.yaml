@@ -6,6 +6,7 @@ description: Create a new contact
 security:
   - bearerAuth: []
 requestBody:
+  required: true
   content:
     multipart/form-data:
       schema:
@@ -18,14 +19,23 @@ requestBody:
             description: Contact's name
             type: string
             example: Petro Vaskiv
-          phoneNumber:
-            type: string
-            description: Contact number
-            example: 380995686988
           email:
             type: string
             format: email
             example: petro@example.com
+          phoneNumber:
+            type: string
+            description: Contact number
+            example: 380995686988
+          isFavourite:
+            type: boolean
+            example: true
+          contactType:
+            type: string
+            description: Contact contact type
+            enum: [work, home, personal]
+            example: personal
+            default: personal
           photo:
             type: string
             format: binary

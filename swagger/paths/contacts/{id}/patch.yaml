@@ -9,9 +9,9 @@ parameters:
   - name: id
     in: path
     required: true
-    description: ID of the contact to update
     schema:
       type: string
+      description: ID of the contact to update
 requestBody:
   required: true
   content:
@@ -32,6 +32,15 @@ requestBody:
             format: email
             description: Updated email
             example: ivan@example.com
+          isFavourite:
+            type: boolean
+            example: false
+          contactType:
+            type: string
+            description: Contact contact type
+            enum: [work, home, personal]
+            example: personal
+            default: personal
           photo:
             type: string
             format: binary
