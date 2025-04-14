@@ -88,24 +88,6 @@
               ]
             },
             "description": "Sort order"
-          },
-          {
-            "name": "name",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Filter contacts by name"
-          },
-          {
-            "name": "email",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Filter contacts by email"
           }
         ],
         "responses": {
@@ -127,34 +109,42 @@
                     "data": {
                       "type": "object",
                       "required": [
-                        "totalPages",
-                        "currentPage",
+                        "page",
                         "perPage",
-                        "totalCount",
-                        "contacts"
+                        "totalItems",
+                        "totalPages",
+                        "data"
                       ],
                       "properties": {
-                        "totalPages": {
-                          "type": "integer",
-                          "example": 5
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/contact"
+                          }
                         },
-                        "currentPage": {
+                        "page": {
                           "type": "integer",
                           "example": 1
                         },
                         "perPage": {
                           "type": "integer",
-                          "example": 10
+                          "example": 5
                         },
-                        "totalCount": {
+                        "totalIems": {
                           "type": "integer",
-                          "example": 50
+                          "example": 4
                         },
-                        "contacts": {
-                          "type": "array",
-                          "items": {
-                            "$ref": "#/components/schemas/contact"
-                          }
+                        "totalPages": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "hasNextPage": {
+                          "type": "boolean",
+                          "example": false
+                        },
+                        "HasPreviousPage": {
+                          "type": "boolean",
+                          "example": false
                         }
                       }
                     }
